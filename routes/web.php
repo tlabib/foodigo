@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\RestaurantManagementController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,13 @@ Route::middleware(['auth', 'verified', 'role:rider'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
     Route::get('/admin/orders', [DashboardController::class, 'admin'])->name('admin.orders.index');
+    Route::get('/admin/restaurants', [RestaurantManagementController::class, 'index'])->name('admin.restaurants.index');
+    Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.index');
+    Route::post('/admin/restaurants', [RestaurantManagementController::class, 'store'])->name('admin.restaurants.store');
+    Route::patch('/admin/restaurants/{restaurant}/toggle-active', [RestaurantManagementController::class, 'toggleActive'])
+        ->name('admin.restaurants.toggle-active');
+    Route::post('/admin/restaurants/{restaurant}/menu-items', [RestaurantManagementController::class, 'storeMenuItem'])
+        ->name('admin.restaurants.menu-items.store');
 });
 
 require __DIR__.'/auth.php';
