@@ -5,7 +5,10 @@
             @if (session('status'))
                 <div class="bg-[#ffe3df] text-[#F15B4E] px-4 py-3 rounded-xl">{{ session('status') }}</div>
             @endif
-            <a href="{{ route('customer.orders.create') }}" class="px-4 py-2 rounded-full bg-[#F15B4E] text-white text-sm inline-block">Place New Order</a>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('customer.cart') }}" class="px-4 py-2 rounded-full bg-[#F15B4E] text-white text-sm inline-block">Go to Cart</a>
+                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full border border-[#F15B4E] text-[#F15B4E] text-sm inline-block">Browse Restaurants</a>
+            </div>
             <div class="space-y-3">
                 @forelse ($orders as $order)
                     <div class="bg-white rounded-2xl shadow-sm p-4">

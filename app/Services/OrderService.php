@@ -55,6 +55,49 @@ class OrderService
         });
     }
 
+    public function placeOrderFromCart(int $customerId, int $restaurantId, array $cartItems, string $deliveryAddress): Order
+    {
+        return DB::transaction(function () use ($customerId, $restaurantId, $cartItems, $deliveryAddress) {
+            $menuItems = MenuItem::query()
+                ->whereIn('id', array_keys($cartItems))
+                ->where('restaurant_id', $restaurantId)
+                ->where('is_available', true)
+                ->get()
+                ->keyBy('id');
+
+            if ($menuItems->isEmpty()) {
+                throw ValidationException::withMessages([
+                    'cart' => 'Your cart has no valid items.',
+                ]);
+            }
+
+            $order = $this->orderRepository->create([
+                'user_id' => $customerId,
+                'restaurant_id' => $restaurantId,
+                'status' => Order::STATUS_PENDING,
+                'delivery_address' => $deliveryAddress,
+                'total_price' => 0,
+            ]);
+
+            $total = 0.0;
+            foreach ($cartItems as $menuItemId => $quantity) {
+                $menuItem = $menuItems->get((int) $menuItemId);
+                if (! $menuItem) {
+                    continue;
+                }
+
+                $qty = max(1, min(20, (int) $quantity));
+                $this->orderRepository->addItem($order, $menuItem, $qty);
+                $total += ((float) $menuItem->price * $qty);
+            }
+
+            $this->orderRepository->updateForAdmin($order, ['total_price' => $total]);
+            $this->orderRepository->createStatusHistory($order, Order::STATUS_PENDING);
+
+            return $order->refresh();
+        });
+    }
+
     public function adminUpdateOrder(Order $order, array $payload): Order
     {
         $updated = $this->orderRepository->updateForAdmin($order, [

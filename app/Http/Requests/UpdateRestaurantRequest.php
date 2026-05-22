@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMenuItemRequest extends FormRequest
+class UpdateRestaurantRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,8 +17,9 @@ class StoreMenuItemRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'is_available' => ['required', 'boolean'],
+            'delivery_time' => ['nullable', 'integer', 'min:1', 'max:180'],
+            'rating' => ['nullable', 'numeric', 'between:0,5'],
+            'is_active' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }

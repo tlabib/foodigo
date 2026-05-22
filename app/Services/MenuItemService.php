@@ -16,4 +16,19 @@ class MenuItemService
     {
         return $this->menuItemRepository->createForRestaurant($restaurant, $data);
     }
+
+    public function update(MenuItem $menuItem, array $data): MenuItem
+    {
+        return $this->menuItemRepository->update($menuItem, $data);
+    }
+
+    public function delete(MenuItem $menuItem): void
+    {
+        $this->menuItemRepository->delete($menuItem);
+    }
+
+    public function toggleAvailability(MenuItem $menuItem): MenuItem
+    {
+        return $this->menuItemRepository->toggleAvailability($menuItem);
+    }
 }

@@ -20,6 +20,8 @@ class StoreRestaurantRequest extends FormRequest
             'delivery_time' => ['nullable', 'integer', 'min:1', 'max:180'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
             'is_active' => ['required', 'boolean'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
     }
 }
+
