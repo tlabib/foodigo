@@ -28,11 +28,23 @@ class OrderService
     public function placeOrder(int $customerId, array $payload): Order
     {
         return DB::transaction(function () use ($customerId, $payload) {
-            $menuItem = MenuItem::query()->findOrFail($payload['menu_item_id']);
+            $menuItem = MenuItem::query()->with('restaurant')->findOrFail($payload['menu_item_id']);
 
             if ((int) $menuItem->restaurant_id !== (int) $payload['restaurant_id']) {
                 throw ValidationException::withMessages([
                     'menu_item_id' => 'Selected menu item does not belong to the selected restaurant.',
+                ]);
+            }
+
+            if (! $menuItem->is_available) {
+                throw ValidationException::withMessages([
+                    'menu_item_id' => 'Selected menu item is currently unavailable.',
+                ]);
+            }
+
+            if (! $menuItem->restaurant || ! $menuItem->restaurant->is_active) {
+                throw ValidationException::withMessages([
+                    'restaurant_id' => 'Selected restaurant is currently inactive.',
                 ]);
             }
 
