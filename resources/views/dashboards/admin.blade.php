@@ -74,15 +74,24 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                    <select name="rider_id" class="border-slate-300 rounded-md text-sm">
+                                    <select name="rider_id" class="border-slate-300 rounded-md text-sm js-rider-select">
                                         <option value="">Unassigned</option>
                                         @foreach ($riders as $rider)
                                             <option value="{{ $rider->id }}" @selected((int) $order->rider_id === (int) $rider->id)>{{ $rider->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button type="submit" class="px-4 py-2 rounded-md bg-[#F15B4E] text-white text-sm">Update</button>
+                                    <button
+                                        type="submit"
+                                        class="px-4 py-2 rounded-md text-white text-sm {{ $order->rider_id ? 'bg-[#F15B4E]' : 'bg-slate-300 cursor-not-allowed' }} js-update-button"
+                                        @disabled(! $order->rider_id)
+                                    >
+                                        Update
+                                    </button>
                                     <a href="{{ route('admin.orders.show', $order) }}" class="px-4 py-2 rounded-md border border-slate-300 text-slate-700 text-sm text-center">Open Details</a>
                                 </form>
+                                @if (! $order->rider_id)
+                                    <p class="mt-1 text-xs text-amber-700">Assign a rider first to enable updates.</p>
+                                @endif
                             </div>
                         </div>
                     @empty
@@ -132,4 +141,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('form[action*="/admin/orders/"]').forEach((form) => {
+            const riderSelect = form.querySelector('.js-rider-select');
+            const updateButton = form.querySelector('.js-update-button');
+            if (!riderSelect || !updateButton) return;
+
+            const refresh = () => {
+                const hasRider = riderSelect.value !== '';
+                updateButton.disabled = !hasRider;
+                updateButton.classList.toggle('bg-slate-300', !hasRider);
+                updateButton.classList.toggle('cursor-not-allowed', !hasRider);
+                updateButton.classList.toggle('bg-[#F15B4E]', hasRider);
+            };
+
+            riderSelect.addEventListener('change', refresh);
+            refresh();
+        });
+    </script>
 </x-app-layout>

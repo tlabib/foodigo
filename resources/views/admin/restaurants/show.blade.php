@@ -100,56 +100,71 @@
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Menu Items</h3>
                 <div class="space-y-4">
                     @forelse ($restaurant->menuItems as $item)
-                        <div class="border border-slate-200 rounded-xl p-4 space-y-3">
-                            <form method="POST" action="{{ route('admin.restaurants.menu-items.update', [$restaurant, $item]) }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                @csrf
-                                @method('PATCH')
-                                <div>
-                                    <x-input-label :value="__('Name')" />
-                                    <x-text-input name="name" type="text" class="mt-1 block w-full" :value="$item->name" required />
+                        <details class="border border-slate-200 rounded-xl p-4">
+                            <summary class="cursor-pointer list-none">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div class="font-medium text-slate-900">{{ $item->name }}</div>
+                                    <div class="flex flex-wrap items-center gap-2 text-sm">
+                                        <span class="text-slate-700">৳{{ number_format((float) $item->price, 2) }}</span>
+                                        <span class="px-2 py-0.5 rounded-full {{ $item->is_available ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
+                                            {{ $item->is_available ? 'Available' : 'Unavailable' }}
+                                        </span>
+                                        <span class="text-slate-500">Click to expand</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <x-input-label :value="__('Price')" />
-                                    <x-text-input name="price" type="number" class="mt-1 block w-full" step="0.01" min="0" :value="$item->price" required />
-                                </div>
-                                <div>
-                                    <x-input-label :value="__('Availability')" />
-                                    <select name="is_available" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-                                        <option value="1" @selected($item->is_available)>Available</option>
-                                        <option value="0" @selected(! $item->is_available)>Unavailable</option>
-                                    </select>
-                                </div>
-                                <div class="md:col-span-2">
-                                    <x-input-label :value="__('Description')" />
-                                    <textarea name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" rows="2">{{ $item->description }}</textarea>
-                                </div>
-                                <div class="md:col-span-2">
-                                    <x-input-label :value="__('Menu Item Image (optional)')" />
-                                    <input name="image" type="file" accept=".jpg,.jpeg,.png,.webp" class="mt-1 block w-full text-sm text-slate-600">
-                                    @if ($item->image)
-                                        <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->name }}" class="mt-3 h-16 w-16 rounded-lg object-cover border">
-                                    @endif
-                                </div>
-                                <div class="md:col-span-2 flex flex-wrap gap-2">
-                                    <x-primary-button class="!bg-[#F15B4E] hover:!bg-[#e44f42]">Update Item</x-primary-button>
-                                </div>
-                            </form>
+                            </summary>
 
-                            <div class="flex flex-wrap gap-2">
-                                <form method="POST" action="{{ route('admin.restaurants.menu-items.toggle-availability', [$restaurant, $item]) }}">
+                            <div class="mt-4 space-y-3">
+                                <form method="POST" action="{{ route('admin.restaurants.menu-items.update', [$restaurant, $item]) }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="px-3 py-1 rounded-full border border-slate-200 text-slate-700 text-sm">
-                                        {{ $item->is_available ? 'Deactivate' : 'Activate' }} Item
-                                    </button>
+                                    <div>
+                                        <x-input-label :value="__('Name')" />
+                                        <x-text-input name="name" type="text" class="mt-1 block w-full" :value="$item->name" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label :value="__('Price')" />
+                                        <x-text-input name="price" type="number" class="mt-1 block w-full" step="0.01" min="0" :value="$item->price" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label :value="__('Availability')" />
+                                        <select name="is_available" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                                            <option value="1" @selected($item->is_available)>Available</option>
+                                            <option value="0" @selected(! $item->is_available)>Unavailable</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <x-input-label :value="__('Description')" />
+                                        <textarea name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" rows="2">{{ $item->description }}</textarea>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <x-input-label :value="__('Menu Item Image (optional)')" />
+                                        <input name="image" type="file" accept=".jpg,.jpeg,.png,.webp" class="mt-1 block w-full text-sm text-slate-600">
+                                        @if ($item->image)
+                                            <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->name }}" class="mt-3 h-16 w-16 rounded-lg object-cover border">
+                                        @endif
+                                    </div>
+                                    <div class="md:col-span-2 flex flex-wrap gap-2">
+                                        <x-primary-button class="!bg-[#F15B4E] hover:!bg-[#e44f42]">Update Item</x-primary-button>
+                                    </div>
                                 </form>
-                                <form method="POST" action="{{ route('admin.restaurants.menu-items.destroy', [$restaurant, $item]) }}" onsubmit="return confirm('Delete this menu item?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="px-3 py-1 rounded-full border border-red-200 text-red-600 text-sm">Delete Item</button>
-                                </form>
+
+                                <div class="flex flex-wrap gap-2">
+                                    <form method="POST" action="{{ route('admin.restaurants.menu-items.toggle-availability', [$restaurant, $item]) }}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="px-3 py-1 rounded-full border border-slate-200 text-slate-700 text-sm">
+                                            {{ $item->is_available ? 'Deactivate' : 'Activate' }} Item
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ route('admin.restaurants.menu-items.destroy', [$restaurant, $item]) }}" onsubmit="return confirm('Delete this menu item?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-3 py-1 rounded-full border border-red-200 text-red-600 text-sm">Delete Item</button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
+                        </details>
                     @empty
                         <p class="text-slate-500 text-sm">No menu items yet.</p>
                     @endforelse
