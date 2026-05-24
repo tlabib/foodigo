@@ -52,6 +52,10 @@
                     <form method="POST" action="{{ route('customer.orders.store') }}" class="space-y-3">
                         @csrf
                         <div>
+                            <x-input-label :value="__('Payment Method')" />
+                            <p class="mt-1 text-sm text-slate-700 font-medium">Cash on Delivery</p>
+                        </div>
+                        <div>
                             <x-input-label for="delivery_address" :value="__('Delivery Address')" />
                             <x-text-input id="delivery_address" name="delivery_address" type="text" class="mt-1 block w-full" required />
                         </div>

@@ -13,7 +13,7 @@
                 <p class="text-gray-900">Welcome, rider. Manage your assigned deliveries.</p>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('rider.orders.index') }}" class="px-4 py-2 rounded-full bg-[#F15B4E] text-white text-sm inline-block">Latest Assigned Deliveries</a>
-                    <a href="{{ route('rider.orders.index') }}" class="px-4 py-2 rounded-full border border-[#F15B4E] text-[#F15B4E] text-sm inline-block">All Delivery History</a>
+                    {{-- <a href="{{ route('rider.orders.index') }}" class="px-4 py-2 rounded-full border border-[#F15B4E] text-[#F15B4E] text-sm inline-block">All Delivery History</a> --}}
                 </div>
             </div>
 
@@ -31,6 +31,11 @@
                                     <p class="font-semibold text-slate-900">Order #{{ $order->id }} - {{ $order->restaurant->name }}</p>
                                     <p class="text-sm text-slate-600">Customer: {{ $order->customer->name }} ({{ $order->customer->email }})</p>
                                     <p class="text-sm text-slate-600">Address: {{ $order->delivery_address }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>
@@ -86,6 +91,11 @@
                                     <p class="font-semibold text-slate-900">Order #{{ $order->id }} - {{ $order->restaurant->name }}</p>
                                     <p class="text-sm text-slate-600">Customer: {{ $order->customer->name }} ({{ $order->customer->email }})</p>
                                     <p class="text-sm text-slate-600">Address: {{ $order->delivery_address }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>

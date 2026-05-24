@@ -18,6 +18,8 @@ class Order extends Model
     public const STATUS_DELIVERED = 'delivered';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_PICKED_UP = 'picked_up';
+    public const PAYMENT_METHOD_COD = 'cash_on_delivery';
+    public const PAYMENT_STATUS_PENDING = 'pending';
 
     public static function allStatuses(): array
     {
@@ -64,6 +66,13 @@ class Order extends Model
         return in_array($this->status, self::historyStatuses(), true);
     }
 
+    public static function paymentMethods(): array
+    {
+        return [
+            self::PAYMENT_METHOD_COD,
+        ];
+    }
+
     protected $fillable = [
         'user_id',
         'restaurant_id',
@@ -71,12 +80,17 @@ class Order extends Model
         'status',
         'total_price',
         'delivery_address',
+        'payment_method',
+        'payment_status',
+        'payment_transaction_ref',
+        'paid_at',
     ];
 
     protected function casts(): array
     {
         return [
             'total_price' => 'decimal:2',
+            'paid_at' => 'datetime',
         ];
     }
 

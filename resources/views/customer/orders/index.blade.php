@@ -14,6 +14,13 @@
                     <div class="bg-white rounded-2xl shadow-sm p-4">
                         <p class="font-semibold">Order #{{ $order->id }} - {{ $order->restaurant->name }}</p>
                         <p class="text-sm text-slate-600">{{ ucfirst(str_replace('_', ' ', $order->status)) }} | ${{ number_format((float) $order->total_price, 2) }}</p>
+                        <p class="text-xs text-slate-500">
+                            Payment: {{ ucfirst(str_replace('_', ' ', $order->payment_method)) }} -
+                            {{ ucfirst($order->payment_status) }}
+                            @if ($order->payment_transaction_ref)
+                                ({{ $order->payment_transaction_ref }})
+                            @endif
+                        </p>
                         <div class="mt-2">
                             @foreach ($order->statusHistories as $history)
                                 <p class="text-xs text-slate-500">{{ $history->created_at->format('Y-m-d H:i') }} - {{ ucfirst(str_replace('_', ' ', $history->status)) }}</p>

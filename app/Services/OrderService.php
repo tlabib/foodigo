@@ -55,9 +55,15 @@ class OrderService
         });
     }
 
-    public function placeOrderFromCart(int $customerId, int $restaurantId, array $cartItems, string $deliveryAddress): Order
+    public function placeOrderFromCart(
+        int $customerId,
+        int $restaurantId,
+        array $cartItems,
+        string $deliveryAddress,
+        string $paymentMethod
+    ): Order
     {
-        return DB::transaction(function () use ($customerId, $restaurantId, $cartItems, $deliveryAddress) {
+        return DB::transaction(function () use ($customerId, $restaurantId, $cartItems, $deliveryAddress, $paymentMethod) {
             $menuItems = MenuItem::query()
                 ->whereIn('id', array_keys($cartItems))
                 ->where('restaurant_id', $restaurantId)
@@ -77,6 +83,10 @@ class OrderService
                 'status' => Order::STATUS_PENDING,
                 'delivery_address' => $deliveryAddress,
                 'total_price' => 0,
+                'payment_method' => $paymentMethod,
+                'payment_status' => Order::PAYMENT_STATUS_PENDING,
+                'payment_transaction_ref' => null,
+                'paid_at' => null,
             ]);
 
             $total = 0.0;

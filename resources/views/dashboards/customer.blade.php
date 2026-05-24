@@ -34,6 +34,11 @@
                                         Current stage: {{ ucfirst(str_replace('_', ' ', $order->status)) }}
                                     </p>
                                     <p class="font-bold text-sm text-black">Rider: {{ $order->rider?->name ?? 'Not assigned yet' }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>
@@ -88,6 +93,11 @@
                                         Final stage: {{ ucfirst(str_replace('_', ' ', $order->status)) }}
                                     </p>
                                     <p class="font-bold text-sm text-black">Rider: {{ $order->rider?->name ?? 'Not assigned yet' }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>

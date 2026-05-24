@@ -14,6 +14,11 @@
                 <p><span class="font-semibold">Restaurant:</span> {{ $order->restaurant->name }}</p>
                 <p><span class="font-semibold">Address:</span> {{ $order->delivery_address }}</p>
                 <p><span class="font-semibold">Total:</span> ${{ number_format((float) $order->total_price, 2) }}</p>
+                <p><span class="font-semibold">Payment Method:</span> {{ ucfirst(str_replace('_', ' ', $order->payment_method)) }}</p>
+                <p><span class="font-semibold">Payment Status:</span> {{ ucfirst($order->payment_status) }}</p>
+                @if ($order->payment_transaction_ref)
+                    <p><span class="font-semibold">Transaction Ref:</span> {{ $order->payment_transaction_ref }}</p>
+                @endif
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm p-5">

@@ -42,6 +42,11 @@
                                     <p class="font-semibold text-slate-900">Order #{{ $order->id }} - {{ $order->restaurant->name }}</p>
                                     <p class="text-sm text-slate-600">Customer: {{ $order->customer->name }} ({{ $order->customer->email }})</p>
                                     <p class="text-sm text-slate-600">Rider: {{ $order->rider?->name ?? 'Not assigned' }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>
@@ -100,6 +105,11 @@
                                     <p class="font-semibold text-slate-900">Order #{{ $order->id }} - {{ $order->restaurant->name }}</p>
                                     <p class="text-sm text-slate-600">Customer: {{ $order->customer->name }} ({{ $order->customer->email }})</p>
                                     <p class="text-sm text-slate-600">Rider: {{ $order->rider?->name ?? 'Not assigned' }}</p>
+                                    <p class="mt-1">
+                                        <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold px-2.5 py-1">
+                                            Payment: COD
+                                        </span>
+                                    </p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-sm text-slate-500">Total</p>

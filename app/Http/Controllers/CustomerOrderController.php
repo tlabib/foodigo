@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
+use App\Models\Order;
 use App\Models\Restaurant;
 use App\Services\OrderService;
 use Illuminate\Http\RedirectResponse;
@@ -135,7 +136,13 @@ class CustomerOrderController extends Controller
             return back()->withErrors(['cart' => 'Your cart is empty.']);
         }
 
-        $this->orderService->placeOrderFromCart(auth()->id(), (int) $cart['restaurant_id'], $cart['items'], $validated['delivery_address']);
+        $this->orderService->placeOrderFromCart(
+            auth()->id(),
+            (int) $cart['restaurant_id'],
+            $cart['items'],
+            $validated['delivery_address'],
+            Order::PAYMENT_METHOD_COD
+        );
         session()->forget('cart');
 
         return redirect()->route('customer.orders.index')->with('status', 'Order placed successfully.');
