@@ -19,14 +19,7 @@ class AdminUpdateOrderRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in([
-                    Order::STATUS_PENDING,
-                    Order::STATUS_CONFIRMED,
-                    Order::STATUS_PREPARING,
-                    Order::STATUS_OUT_FOR_DELIVERY,
-                    Order::STATUS_DELIVERED,
-                    Order::STATUS_CANCELLED,
-                ]),
+                Rule::in(Order::adminManageableStatuses()),
             ],
             'rider_id' => ['nullable', 'exists:users,id'],
         ];

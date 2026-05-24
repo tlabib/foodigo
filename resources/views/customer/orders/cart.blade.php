@@ -26,7 +26,7 @@
                             <div class="border border-slate-100 rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                                 <div>
                                     <p class="font-semibold">{{ $entry['menu_item']->name }}</p>
-                                    <p class="text-sm text-slate-500">{{ number_format((float) $entry['menu_item']->price, 2) }} BDT each</p>
+                                    <p class="text-sm text-slate-500">${{ number_format((float) $entry['menu_item']->price, 2) }} each</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <form method="POST" action="{{ route('customer.cart.items.update', $entry['menu_item']) }}" class="flex items-center gap-2">
@@ -41,14 +41,14 @@
                                         <button type="submit" class="px-3 py-1 rounded-full border border-red-200 text-red-600 text-sm">Remove</button>
                                     </form>
                                 </div>
-                                <p class="font-semibold text-[#F15B4E]">{{ number_format((float) $entry['line_total'], 2) }} BDT</p>
+                                <p class="font-semibold text-[#F15B4E]">${{ number_format((float) $entry['line_total'], 2) }}</p>
                             </div>
                         @endforeach
                     </div>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <p class="text-lg font-semibold text-slate-800 mb-3">Total: {{ number_format((float) $total, 2) }} BDT</p>
+                    <p class="text-lg font-semibold text-slate-800 mb-3">Total: ${{ number_format((float) $total, 2) }}</p>
                     <form method="POST" action="{{ route('customer.orders.store') }}" class="space-y-3">
                         @csrf
                         <div>

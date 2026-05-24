@@ -14,10 +14,19 @@ class RestaurantCatalogController extends Controller
     {
         abort_unless($restaurant->is_active, 404);
 
+        $cart = session()->get('cart', []);
+        $cartRestaurantId = (int) ($cart['restaurant_id'] ?? 0);
+        $cartRestaurantName = null;
+        if ($cartRestaurantId > 0 && $cartRestaurantId !== (int) $restaurant->id) {
+            $cartRestaurantName = Restaurant::query()->whereKey($cartRestaurantId)->value('name');
+        }
+
         return view('restaurants.show', [
             'restaurant' => $restaurant->load([
                 'menuItems' => fn ($query) => $query->where('is_available', true)->orderBy('name'),
             ]),
+            'cartRestaurantId' => $cartRestaurantId,
+            'cartRestaurantName' => $cartRestaurantName,
         ]);
     }
 
@@ -35,6 +44,7 @@ class RestaurantCatalogController extends Controller
 
         if (! empty($cart) && (int) ($cart['restaurant_id'] ?? 0) !== (int) $restaurant->id) {
             $cart = [];
+            session()->flash('status', 'Cart switched to this restaurant. Previous restaurant items were cleared.');
         }
 
         $items = $cart['items'] ?? [];
@@ -48,4 +58,3 @@ class RestaurantCatalogController extends Controller
         return back()->with('status', "{$menuItem->name} added to cart.");
     }
 }
-

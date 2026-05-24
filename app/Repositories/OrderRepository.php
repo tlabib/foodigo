@@ -58,7 +58,11 @@ class OrderRepository
     public function riderOrders(int $riderId): Collection
     {
         return Order::query()
-            ->with(['customer:id,name', 'restaurant:id,name'])
+            ->with([
+                'customer:id,name,email',
+                'restaurant:id,name',
+                'statusHistories',
+            ])
             ->where('rider_id', $riderId)
             ->latest()
             ->get();
@@ -67,7 +71,12 @@ class OrderRepository
     public function customerOrders(int $customerId): Collection
     {
         return Order::query()
-            ->with(['restaurant:id,name', 'statusHistories'])
+            ->with([
+                'restaurant:id,name',
+                'rider:id,name,email',
+                'items.menuItem:id,name',
+                'statusHistories',
+            ])
             ->where('user_id', $customerId)
             ->latest()
             ->get();

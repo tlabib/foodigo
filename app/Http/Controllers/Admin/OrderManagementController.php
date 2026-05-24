@@ -24,15 +24,7 @@ class OrderManagementController extends Controller
         return view('admin.orders.index', [
             'orders' => $this->orderService->adminListing($status),
             'selectedStatus' => $status ?? 'all',
-            'statuses' => [
-                'all',
-                Order::STATUS_PENDING,
-                Order::STATUS_CONFIRMED,
-                Order::STATUS_PREPARING,
-                Order::STATUS_OUT_FOR_DELIVERY,
-                Order::STATUS_DELIVERED,
-                Order::STATUS_CANCELLED,
-            ],
+            'statuses' => array_merge(['all'], Order::adminManageableStatuses()),
         ]);
     }
 
@@ -41,14 +33,7 @@ class OrderManagementController extends Controller
         return view('admin.orders.show', [
             'order' => $this->orderService->getAdminOrderDetails($order),
             'riders' => User::query()->where('role', User::ROLE_RIDER)->orderBy('name')->get(['id', 'name', 'email']),
-            'statuses' => [
-                Order::STATUS_PENDING,
-                Order::STATUS_CONFIRMED,
-                Order::STATUS_PREPARING,
-                Order::STATUS_OUT_FOR_DELIVERY,
-                Order::STATUS_DELIVERED,
-                Order::STATUS_CANCELLED,
-            ],
+            'statuses' => Order::adminManageableStatuses(),
         ]);
     }
 

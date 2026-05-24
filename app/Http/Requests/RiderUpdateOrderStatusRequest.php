@@ -19,11 +19,7 @@ class RiderUpdateOrderStatusRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in([
-                    Order::STATUS_PICKED_UP,
-                    Order::STATUS_ON_THE_WAY,
-                    Order::STATUS_DELIVERED,
-                ]),
+                Rule::in(Order::riderUpdatableStatuses()),
             ],
         ];
     }

@@ -16,7 +16,7 @@
                         @method('PATCH')
                         <select name="status" class="border-slate-300 rounded-md" required>
                             <option value="picked_up">Picked Up</option>
-                            <option value="on_the_way">On The Way</option>
+                            <option value="out_for_delivery">Out For Delivery</option>
                             <option value="delivered">Delivered</option>
                         </select>
                         <x-primary-button class="!bg-[#F15B4E] hover:!bg-[#e44f42]">Update</x-primary-button>

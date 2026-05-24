@@ -23,7 +23,7 @@
                             </div>
                             <div class="text-right">
                                 <p class="text-sm text-slate-600">{{ ucfirst(str_replace('_', ' ', $order->status)) }}</p>
-                                <p class="font-semibold text-slate-800">{{ number_format((float) $order->total_price, 2) }} BDT</p>
+                                <p class="font-semibold text-slate-800">${{ number_format((float) $order->total_price, 2) }}</p>
                             </div>
                         </div>
                     </a>

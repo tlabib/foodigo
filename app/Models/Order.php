@@ -18,7 +18,51 @@ class Order extends Model
     public const STATUS_DELIVERED = 'delivered';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_PICKED_UP = 'picked_up';
-    public const STATUS_ON_THE_WAY = 'on_the_way';
+
+    public static function allStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING,
+            self::STATUS_CONFIRMED,
+            self::STATUS_PREPARING,
+            self::STATUS_PICKED_UP,
+            self::STATUS_OUT_FOR_DELIVERY,
+            self::STATUS_DELIVERED,
+            self::STATUS_CANCELLED,
+        ];
+    }
+
+    public static function adminManageableStatuses(): array
+    {
+        return self::allStatuses();
+    }
+
+    public static function riderUpdatableStatuses(): array
+    {
+        return [
+            self::STATUS_PICKED_UP,
+            self::STATUS_OUT_FOR_DELIVERY,
+            self::STATUS_DELIVERED,
+        ];
+    }
+
+    public static function historyStatuses(): array
+    {
+        return [
+            self::STATUS_DELIVERED,
+            self::STATUS_CANCELLED,
+        ];
+    }
+
+    public static function currentStatuses(): array
+    {
+        return array_values(array_diff(self::allStatuses(), self::historyStatuses()));
+    }
+
+    public function isTerminal(): bool
+    {
+        return in_array($this->status, self::historyStatuses(), true);
+    }
 
     protected $fillable = [
         'user_id',

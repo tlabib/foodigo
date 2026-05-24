@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Order;
+use App\Services\OrderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(private readonly OrderService $orderService)
+    {
+    }
+
     public function index(): RedirectResponse
     {
         $user = auth()->user();
@@ -21,16 +27,40 @@ class DashboardController extends Controller
 
     public function customer(): View
     {
-        return view('dashboards.customer');
+        $orders = $this->orderService->customerOrders((int) auth()->id())->take(20);
+        [$historyOrders, $currentOrders] = $orders->partition(fn ($order) => $order->isTerminal());
+
+        return view('dashboards.customer', [
+            'currentOrders' => $currentOrders->values(),
+            'historyOrders' => $historyOrders->values(),
+        ]);
     }
 
     public function rider(): View
     {
-        return view('dashboards.rider');
+        $orders = $this->orderService->riderOrders((int) auth()->id())->take(20);
+        [$historyOrders, $currentOrders] = $orders->partition(fn ($order) => $order->isTerminal());
+
+        return view('dashboards.rider', [
+            'currentOrders' => $currentOrders->values(),
+            'historyOrders' => $historyOrders->values(),
+            'riderStatuses' => Order::riderUpdatableStatuses(),
+        ]);
     }
 
     public function admin(): View
     {
-        return view('dashboards.admin');
+        $orders = $this->orderService->adminListing()->take(24);
+        [$historyOrders, $currentOrders] = $orders->partition(fn ($order) => $order->isTerminal());
+
+        return view('dashboards.admin', [
+            'currentOrders' => $currentOrders->values(),
+            'historyOrders' => $historyOrders->values(),
+            'riders' => User::query()
+                ->where('role', User::ROLE_RIDER)
+                ->orderBy('name')
+                ->get(['id', 'name']),
+            'statuses' => Order::adminManageableStatuses(),
+        ]);
     }
 }

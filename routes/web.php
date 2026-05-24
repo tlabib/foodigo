@@ -18,8 +18,10 @@ Route::get('/', function () {
         ->paginate(8);
 
     return view('welcome', compact('restaurants'));
-});
+})->name('home');
 Route::get('/restaurants/{restaurant}', [RestaurantCatalogController::class, 'show'])->name('restaurants.show');
+
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -31,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// customer routes
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::get('/customer/dashboard', [DashboardController::class, 'customer'])->name('customer.dashboard');
     Route::post('/restaurants/{restaurant}/menu-items/{menuItem}/cart', [RestaurantCatalogController::class, 'addToCart'])
@@ -43,11 +46,15 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::post('/customer/orders', [CustomerOrderController::class, 'store'])->name('customer.orders.store');
 });
 
+// rider routes
+
 Route::middleware(['auth', 'verified', 'role:rider'])->group(function () {
     Route::get('/rider/dashboard', [DashboardController::class, 'rider'])->name('rider.dashboard');
     Route::get('/rider/orders', [RiderOrderController::class, 'index'])->name('rider.orders.index');
     Route::patch('/rider/orders/{order}/status', [RiderOrderController::class, 'updateStatus'])->name('rider.orders.update-status');
 });
+
+//admin routes
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');

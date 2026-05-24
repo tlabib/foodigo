@@ -17,7 +17,7 @@
                     <select id="menu_item_id" name="menu_item_id" class="mt-1 block w-full border-slate-300 rounded-md" required>
                         @foreach ($restaurants as $restaurant)
                             @foreach ($restaurant->menuItems as $item)
-                                <option value="{{ $item->id }}">{{ $restaurant->name }} - {{ $item->name }} ({{ number_format((float) $item->price, 2) }} BDT)</option>
+                                <option value="{{ $item->id }}">{{ $restaurant->name }} - {{ $item->name }} (${{ number_format((float) $item->price, 2) }})</option>
                             @endforeach
                         @endforeach
                     </select>

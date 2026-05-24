@@ -13,7 +13,7 @@
                 <p><span class="font-semibold">Customer:</span> {{ $order->customer->name }} ({{ $order->customer->email }})</p>
                 <p><span class="font-semibold">Restaurant:</span> {{ $order->restaurant->name }}</p>
                 <p><span class="font-semibold">Address:</span> {{ $order->delivery_address }}</p>
-                <p><span class="font-semibold">Total:</span> {{ number_format((float) $order->total_price, 2) }} BDT</p>
+                <p><span class="font-semibold">Total:</span> ${{ number_format((float) $order->total_price, 2) }}</p>
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm p-5">
@@ -52,7 +52,7 @@
                     @foreach ($order->items as $item)
                         <div class="border border-slate-200 rounded-lg px-3 py-2 flex justify-between">
                             <span>{{ $item->menuItem->name }} x{{ $item->quantity }}</span>
-                            <span>{{ number_format((float) $item->price, 2) }} BDT</span>
+                            <span>${{ number_format((float) $item->price, 2) }}</span>
                         </div>
                     @endforeach
                 </div>

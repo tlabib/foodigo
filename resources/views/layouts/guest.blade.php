@@ -15,10 +15,11 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-[#f5f6f8]">
+            <div class="text-center">
+                <a href="/" class="inline-flex flex-col items-center gap-2">
+                    <x-application-logo class="w-16 h-16 text-[#F15B4E]" />
+                    <span class="text-3xl font-semibold text-[#F15B4E] leading-none">Foodigo</span>
                 </a>
             </div>
 

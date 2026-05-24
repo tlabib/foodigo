@@ -15,6 +15,12 @@
             @if (session('status'))
                 <div class="bg-[#ffe3df] text-[#F15B4E] px-4 py-3 rounded-xl">{{ session('status') }}</div>
             @endif
+            @if (!empty($cartRestaurantName))
+                <div class="bg-amber-50 text-amber-800 border border-amber-200 px-4 py-3 rounded-xl">
+                    Your cart currently has items from <span class="font-semibold">{{ $cartRestaurantName }}</span>.
+                    Adding items from this restaurant will clear previous cart items.
+                </div>
+            @endif
 
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
                 <div class="h-60 bg-slate-100">
@@ -44,10 +50,11 @@
                             <h4 class="font-semibold">{{ $item->name }}</h4>
                             <p class="text-sm text-slate-500 mt-1">{{ $item->description ?: 'Delicious choice.' }}</p>
                             <div class="mt-3 flex items-center justify-between">
-                                <span class="font-semibold text-[#F15B4E]">{{ number_format((float) $item->price, 2) }} BDT</span>
+                                <span class="font-semibold text-[#F15B4E]">${{ number_format((float) $item->price, 2) }}</span>
                                 @auth
                                     @if (auth()->user()->role === \App\Models\User::ROLE_CUSTOMER)
-                                        <form method="POST" action="{{ route('customer.cart.add', [$restaurant, $item]) }}" class="flex items-center gap-2">
+                                        <form method="POST" action="{{ route('customer.cart.add', [$restaurant, $item]) }}" class="flex items-center gap-2"
+                                              @if (!empty($cartRestaurantName)) onsubmit="return confirm('Your current cart has items from another restaurant. Continue and clear them?')" @endif>
                                             @csrf
                                             <input type="number" name="quantity" min="1" max="20" value="1" class="w-16 border-slate-300 rounded-md text-sm">
                                             <button type="submit" class="px-3 py-1 rounded-full bg-[#F15B4E] text-white text-sm">Add</button>

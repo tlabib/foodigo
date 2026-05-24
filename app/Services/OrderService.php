@@ -100,6 +100,12 @@ class OrderService
 
     public function adminUpdateOrder(Order $order, array $payload): Order
     {
+        if ($order->isTerminal()) {
+            throw ValidationException::withMessages([
+                'status' => 'Delivered or cancelled orders are locked and cannot be edited.',
+            ]);
+        }
+
         $updated = $this->orderRepository->updateForAdmin($order, [
             'status' => $payload['status'],
             'rider_id' => $payload['rider_id'] ?? $order->rider_id,
@@ -112,6 +118,12 @@ class OrderService
 
     public function riderUpdateStatus(Order $order, string $status): Order
     {
+        if ($order->isTerminal()) {
+            throw ValidationException::withMessages([
+                'status' => 'Delivered or cancelled orders are locked and cannot be updated.',
+            ]);
+        }
+
         $updated = $this->orderRepository->updateForAdmin($order, ['status' => $status]);
         $this->orderRepository->createStatusHistory($updated, $status);
 
